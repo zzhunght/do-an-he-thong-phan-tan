@@ -13,8 +13,9 @@ function App() {
     const [message, setMessage] = useState([])
 
     useEffect(() => {
-        socket.current = io('http://192.168.2.185:5000', {
-
+        socket.current = io('192.168.1.86:5000', {
+        //thinh 192.168.1.86:5000
+        //hung http://192.168.2.185:5000
         })
         // Xử lý sự kiện khi kết nối thành công
         socket.current.on('connect', () => {
@@ -58,7 +59,7 @@ function App() {
             {!join ? (
                 <div className='flex items-center justify-center' style={{ width: '100vw', height: '100vh', background: '#d1d1d1' }}>
                     <div className='connect'>
-                        <p className='text-medium'>Ten cua ban</p>
+                        <p className='text-medium'>Tên của bạn</p>
                         <input value={name} onChange={e => setName(e.target.value)} placeholder='Ten cua ban' className='input' />
                         <button
                             className='btn'
@@ -126,7 +127,7 @@ function App() {
                                         </div>
                                         <div className='flex justify-between'>
                                             <p className='number'>{msg?.message}</p>
-                                            <p className={`${msg?.success ? 'success' : 'fail'}`}>{msg?.success ? 'success' : 'sai'}</p>
+                                            <p className={`${msg?.success ? 'success' : 'fail'}`}>{msg?.success ? 'Success' : 'Failed'}</p>
                                         </div>
                                     </div>
                                 ))}

@@ -56,6 +56,10 @@ io.on('connection', (socket) => {
             message: message,
             success:success
         })
+        console.log(received, '================================', sum)
+        if (!success){
+            sum = 0;
+        }
         io.emit('server-sum', sum);
     });
     console.log('another address:', socket.handshake.address);
