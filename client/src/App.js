@@ -50,15 +50,19 @@ function App() {
       });
       // máy khác join
       socket.current.on("another-join", (data) => {
-        console.log("Another join:", data);
-        setIp(data.address.slice(7, 18));
+
+      });
+      socket.current.on("login-return", (data) => {
+        const address = data.address.slice(7)
+        setMessage(data.history)
+        setSum(data.sum)
+        setIp(address);
         setTimeJoin(new Date().toLocaleString());
       });
-
       // máy khác gửi số lên server
       socket.current.on("message-from-another", (data) => {
         console.log("Message from another:", data);
-        setMessage((old) => [...old, data]);
+        setMessage((old) => [data, ...old]);
         if (id === data.id) {
           setNotification({
             status: data.success,
@@ -89,7 +93,7 @@ function App() {
 
       socket.current.on("another-left", (user_id) => {
         setListUser(old => {
-          const new_data  = old?.filter(item => item.id != user_id)
+          const new_data = old?.filter(item => item.id != user_id)
           return new_data
         })
       })
@@ -250,7 +254,7 @@ function App() {
                               style={{ padding: "2px" }}
                             >
                               <p className="text-small">
-                                {msg?.address.slice(7, 18)}
+                                {msg?.address.slice(7)}
                               </p>
                               <p className="text-small">
                                 {new Date(msg?.time).toLocaleString()}
@@ -262,9 +266,8 @@ function App() {
                             >
                               <p className="number">{msg?.message}</p>
                               <p
-                                className={`${
-                                  msg?.success ? "success" : "fail"
-                                }`}
+                                className={`${msg?.success ? "success" : "fail"
+                                  }`}
                               >
                                 {msg?.success ? "Success" : "Fail"}
                               </p>
@@ -298,7 +301,7 @@ function App() {
                             style={{ padding: "2px" }}
                           >
                             <p className="text-small">
-                              {msg?.address.slice(7, 18)}
+                              {msg?.address.slice(7)}
                             </p>
                             <p className="text-small">
                               {new Date(msg?.time).toLocaleString()}
@@ -328,6 +331,9 @@ function App() {
                     {listUser.map((user) => (
                       <div key={user.time} className="message">
                         <p className="name">{user?.name}</p>
+                        <p className="text-small" style={{textAlign: 'left'}}>
+                          {user?.address?.slice(7)}
+                        </p>
                         <p style={{ textAlign: "start" }}>
                           Time Join : {new Date(user?.time).toLocaleString()}
                         </p>

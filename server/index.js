@@ -12,7 +12,7 @@ const io = new Server(server, {
 });
 app.use(cors());
 const user = {};
-
+const history = [];
 let sum = 0;
 
 io.on("connection", (socket) => {
@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     } else {
       reason = "Nhập lại số trong khoảng từ 1-10";
     }
-    io.emit("message-from-another", {
+    const msg = {
       name: user[`${id}`].name,
       address: user[`${id}`].address,
       time: new Date(),
@@ -56,7 +56,9 @@ io.on("connection", (socket) => {
       message: received,
       success: success,
       reason: reason,
-    });
+    }
+    io.emit("message-from-another",msg );
+    history.push(msg)
     io.emit("server-sum", sum);
   });
   console.log("another address:", socket.handshake.address);
@@ -66,9 +68,14 @@ io.on("connection", (socket) => {
     user[`${id}`].name = name;
     const address = socket.handshake.address;
     const timeJoin = new Date();
-    user[`${id}`].address = address;
+    user[`${id}`].address = address; 
     user[`${id}`].time = timeJoin;
-    socket.emit("another-join", { name, address });
+    socket.emit('login-return', {
+      name: name, 
+      address: address,
+      history: history,
+      sum: sum
+    })
     io.emit("update-user", user);
   });
 });
