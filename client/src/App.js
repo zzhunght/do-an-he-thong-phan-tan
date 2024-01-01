@@ -53,9 +53,9 @@ function App() {
 
       });
       socket.current.on("login-return", (data) => {
-        const address = data.address.slice(7)
+        const address = data?.address?.slice(7)
         setMessage(data.history)
-        setSum(data.sum)
+        setSum(data?.sum || 0)
         setIp(address);
         setTimeJoin(new Date().toLocaleString());
       });
@@ -65,10 +65,10 @@ function App() {
         setMessage((old) => [data, ...old]);
         if (id === data.id) {
           setNotification({
-            status: data.success,
-            reason: data.reason,
-            number: data.message,
-            time: data.time,
+            status: data?.success,
+            reason: data?.reason,
+            number: data?.message,
+            time: data?.time,
           });
           setShowNotification(true);
         }
@@ -243,8 +243,8 @@ function App() {
                     </div>
                     <div className="box">
                       {message
-                        .filter((msg) => msg.id === id)
-                        .map((msg) => (
+                        ?.filter((msg) => msg.id === id)
+                        ?.map((msg) => (
                           <div key={msg.time} className="message">
                             <p className="name" style={{ padding: "2px" }}>
                               {msg?.name}
@@ -254,10 +254,10 @@ function App() {
                               style={{ padding: "2px" }}
                             >
                               <p className="text-small">
-                                {msg?.address.slice(7)}
+                                {msg?.address?.slice(7)}
                               </p>
                               <p className="text-small">
-                                {new Date(msg?.time).toLocaleString()}
+                                {new Date(msg?.time)?.toLocaleString()}
                               </p>
                             </div>
                             <div
@@ -301,10 +301,10 @@ function App() {
                             style={{ padding: "2px" }}
                           >
                             <p className="text-small">
-                              {msg?.address.slice(7)}
+                              {msg?.address?.slice(7)}
                             </p>
                             <p className="text-small">
-                              {new Date(msg?.time).toLocaleString()}
+                              {new Date(msg?.time)?.toLocaleString()}
                             </p>
                           </div>
                           <div
